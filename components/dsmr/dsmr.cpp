@@ -176,43 +176,43 @@ void Dsmr::receive_telegram_() {
     this->bytes_read_++;
 
     // Log each received line
-    if (c == '\n') {
-      res = "";
-      char buf[5];
-      char *bytes = this->telegram_;
-      for (size_t i = next_print_pos; i < this->bytes_read_; i++) {
-        if (bytes[i] == 7) {
-          res += "\\a";
-        } else if (bytes[i] == 8) {
-          res += "\\b";
-        } else if (bytes[i] == 9) {
-          res += "\\t";
-        } else if (bytes[i] == 10) {
-          res += "\\n";
-        } else if (bytes[i] == 11) {
-          res += "\\v";
-        } else if (bytes[i] == 12) {
-          res += "\\f";
-        } else if (bytes[i] == 13) {
-          res += "\\r";
-        } else if (bytes[i] == 27) {
-          res += "\\e";
-        } else if (bytes[i] == 34) {
-          res += "\\\"";
-        } else if (bytes[i] == 39) {
-          res += "\\'";
-        } else if (bytes[i] == 92) {
-          res += "\\\\";
-        } else if (bytes[i] < 32 || bytes[i] > 127) {
-          sprintf(buf, "\\x%02X", bytes[i]);
-          res += buf;
-        } else {
-          res += bytes[i];
-        }
-      }
-      next_print_pos = this->bytes_read_;
-      ESP_LOGD(TAG, "%s", res.c_str());
-    }
+    // if (c == '\n') {
+    //   res = "";
+    //   char buf[5];
+    //   char *bytes = this->telegram_;
+    //   for (size_t i = next_print_pos; i < this->bytes_read_; i++) {
+    //     if (bytes[i] == 7) {
+    //       res += "\\a";
+    //     } else if (bytes[i] == 8) {
+    //       res += "\\b";
+    //     } else if (bytes[i] == 9) {
+    //       res += "\\t";
+    //     } else if (bytes[i] == 10) {
+    //       res += "\\n";
+    //     } else if (bytes[i] == 11) {
+    //       res += "\\v";
+    //     } else if (bytes[i] == 12) {
+    //       res += "\\f";
+    //     } else if (bytes[i] == 13) {
+    //       res += "\\r";
+    //     } else if (bytes[i] == 27) {
+    //       res += "\\e";
+    //     } else if (bytes[i] == 34) {
+    //       res += "\\\"";
+    //     } else if (bytes[i] == 39) {
+    //       res += "\\'";
+    //     } else if (bytes[i] == 92) {
+    //       res += "\\\\";
+    //     } else if (bytes[i] < 32 || bytes[i] > 127) {
+    //       sprintf(buf, "\\x%02X", bytes[i]);
+    //       res += buf;
+    //     } else {
+    //       res += bytes[i];
+    //     }
+    //   }
+    //   next_print_pos = this->bytes_read_;
+    //   ESP_LOGD(TAG, "%s", res.c_str());
+    // }
 
     // Check for a footer, i.e. exlamation mark, followed by a hex checksum.
     if (c == '!') {
