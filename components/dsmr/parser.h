@@ -359,7 +359,7 @@ static const char *const TAG = "dsmr";
 
         crc = _crc16_update(crc, *data_end); // Include the ! in CRC
 
-        esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_DEBUG, TAG, __LINE__, ESPHOME_LOG_FORMAT("CRC: 0x%04x"), crc);
+        //esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_DEBUG, TAG, __LINE__, ESPHOME_LOG_FORMAT("CRC: 0x%04x"), crc);
         //this->ESP_LOGD(TAG, "CRC: 0x%04x", crc);
         ParseResult<uint16_t> check_res = CrcParser::parse(data_end + 1, str + n);
         if (check_res.err)
