@@ -431,15 +431,16 @@ static const char *const TAG = "dsmr";
       // Parse data lines
       bool is_in_block_area = false;
       bool entering_block_area = false;
-      ParseResult<ObisId> *parent_idres = NULL;
+      ParseResult<ObisId> parent_idres = ObisId(255, 255, 255, 255, 255, 255);
       // Iterate through the string to split it into lines
       while (line_end < end)
       {
         if (*line_end == '\r' || *line_end == '\n')
         {
+          esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_DEBUG, TAG, __LINE__, ESPHOME_LOG_FORMAT("Processing: %.*s"), line_end - line_start, line_start);
           // Process the current line
           // If the current line does not end with ")", we might be entering a nested block.
-          if (!is_in_block_area && !entering_block_area && (line_start < line_end) && ((*line_end-1 != ')')))
+          if (!is_in_block_area && !entering_block_area && (line_start < line_end) && ((*(line_end-1) != ')')))
           {
             // Make sure the line does not contain a '('
             const char *tmp = line_start;
@@ -448,9 +449,9 @@ static const char *const TAG = "dsmr";
             // Parse the line as the parent ObisId if there was no '(' or ')'
             if (tmp == line_end)
             {
-              *parent_idres = ObisIdParser::parse(line_start, line_end);
-              if (parent_idres->err)
-                return *parent_idres;
+              parent_idres = ObisIdParser::parse(line_start, line_end);
+              if (parent_idres.err)
+                return parent_idres;
               entering_block_area = true;
             }
           }
@@ -465,7 +466,9 @@ static const char *const TAG = "dsmr";
           {
             is_in_block_area = false;
           }
-          // Otherwise, wer are processing a normal data line, whether in a nested block or not.
+          // Otherwise, we are processing a normal data line, whether in a nested block or not.
+          // For now, nested data is ignored, as first we still need to support parent ObisId
+          // on fields.
           else if (!is_in_block_area)
           {
             ParseResult<void> tmp = parse_line(data, line_start, line_end, unknown_error);
