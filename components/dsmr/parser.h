@@ -431,7 +431,7 @@ static const char *const TAG = "dsmr";
       // Parse data lines
       bool is_in_block_area = false;
       bool entering_block_area = false;
-      ParseResult<ObisId> parent_idres = ObisId(255, 255, 255, 255, 255, 255);
+      ObisId parent_id = ObisId(255, 255, 255, 255, 255, 255);
       // Iterate through the string to split it into lines
       while (line_end < end)
       {
@@ -449,7 +449,7 @@ static const char *const TAG = "dsmr";
             // Parse the line as the parent ObisId if there was no '(' or ')'
             if (tmp == line_end)
             {
-              parent_idres = ObisIdParser::parse(line_start, line_end);
+              ParseResult<ObisId> parent_idres = ObisIdParser::parse(line_start, line_end);
               if (parent_idres.err)
                 return parent_idres;
               entering_block_area = true;
