@@ -368,7 +368,7 @@ static const char *const TAG = "dsmr";
         // Check CRC
         if (check_res.result != crc)
         {
-          return res.fail("Checksum mismatch!!!", data_end + 1);
+          return res.fail("Checksum mismatch", data_end + 1);
         }
         res = parse_data(data, data_start, data_end, unknown_error);
         res.next = check_res.next;
@@ -437,7 +437,7 @@ static const char *const TAG = "dsmr";
       {
         if (*line_end == '\r' || *line_end == '\n')
         {
-          esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_DEBUG, TAG, __LINE__, ESPHOME_LOG_FORMAT("Processing: %.*s"), line_end - line_start, line_start);
+          // esphome::esp_log_printf_(ESPHOME_LOG_LEVEL_DEBUG, TAG, __LINE__, ESPHOME_LOG_FORMAT("Processing: %.*s"), line_end - line_start, line_start);
           // Process the current line
           // If the current line does not end with ")", we might be entering a nested block.
           if (!is_in_block_area && !entering_block_area && (line_start < line_end) && ((*(line_end-1) != ')')))
