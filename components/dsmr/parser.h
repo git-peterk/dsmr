@@ -430,27 +430,59 @@ static const char *const TAG = "dsmr";
 
       // Parse data lines
       bool is_in_block_area = false;
+      bool entering_block_area = false;
+      ParseResult<ObisId> *parent_idres = NULL;
+      // Iterate through the string to split it into lines
       while (line_end < end)
       {
         if (*line_end == '\r' || *line_end == '\n')
         {
-          // if line ends with ( or the next line starts with (
-          // - this means that there is a block aggregation area starting
-          if (*(line_end-1) == '(') {
+          // Process the current line
+          // If the current line does not end with ")", we might be entering a nested block.
+          if (!is_in_block_area && !entering_block_area && (line_start < line_end) && ((*line_end-1 != ')')))
+          {
+            // Make sure the line does not contain a '('
+            const char *tmp = line_start;
+            while (tmp < line_end && *tmp != '(')
+              tmp++;
+            // Parse the line as the parent ObisId if there was no '(' or ')'
+            if (tmp == line_end)
+            {
+              *parent_idres = ObisIdParser::parse(line_start, line_end);
+              if (parent_idres->err)
+                return *parent_idres;
+              entering_block_area = true;
+            }
+          }
+          // If current line is just a "(", we are truly entering a nested block.
+          else if (entering_block_area && !is_in_block_area && (*line_start == '(' && line_end == (line_start + 1)))
+          {
+            entering_block_area = false;
             is_in_block_area = true;
           }
-          
-          if (!is_in_block_area) {
+          // Similarly, if current line is just ")", we are exiting a nested block.
+          else if (is_in_block_area && (*line_start == ')' && line_end == (line_start + 1)))
+          {
+            is_in_block_area = false;
+          }
+          // Otherwise, wer are processing a normal data line, whether in a nested block or not.
+          else if (!is_in_block_area)
+          {
             ParseResult<void> tmp = parse_line(data, line_start, line_end, unknown_error);
             if (tmp.err)
               return tmp;
-          } else {
-            if (*line_start == '(') {
-              is_in_block_area = false;
-            }
           }
+
+          // Move line_start to the character after the current line ending
           line_start = line_end + 1;
+          // If the current line ending is \r and the next character is \n, skip the \n
+          if (*line_end == '\r' && line_start < end && *line_start == '\n')
+          {
+            line_start++;
+            line_end++;
+          }
         }
+        // Move to the next character
         line_end++;
       }
 
