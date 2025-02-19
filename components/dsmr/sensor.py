@@ -49,6 +49,18 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_ENERGY,
             state_class=STATE_CLASS_TOTAL_INCREASING,
         ),
+        cv.Optional("energy_delivered_tariff3"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOWATT_HOURS,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_ENERGY,
+            state_class=STATE_CLASS_TOTAL_INCREASING,
+        ),
+        cv.Optional("energy_delivered_tariff4"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOWATT_HOURS,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_ENERGY,
+            state_class=STATE_CLASS_TOTAL_INCREASING,
+        ),
         cv.Optional("energy_returned"): sensor.sensor_schema(
             unit_of_measurement=UNIT_KILOWATT_HOURS,
             accuracy_decimals=3,
@@ -62,6 +74,18 @@ CONFIG_SCHEMA = cv.Schema(
             state_class=STATE_CLASS_TOTAL_INCREASING,
         ),
         cv.Optional("energy_returned_tariff2"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOWATT_HOURS,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_ENERGY,
+            state_class=STATE_CLASS_TOTAL_INCREASING,
+        ),
+        cv.Optional("energy_returned_tariff3"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOWATT_HOURS,
+            accuracy_decimals=3,
+            device_class=DEVICE_CLASS_ENERGY,
+            state_class=STATE_CLASS_TOTAL_INCREASING,
+        ),
+        cv.Optional("energy_returned_tariff4"): sensor.sensor_schema(
             unit_of_measurement=UNIT_KILOWATT_HOURS,
             accuracy_decimals=3,
             device_class=DEVICE_CLASS_ENERGY,
@@ -121,7 +145,12 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_POWER, 
             state_class=STATE_CLASS_MEASUREMENT
         ),
-
+        cv.Optional("energy_positive_reactive"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOVOLT_AMPS_REACTIVE_HOURS, 
+            accuracy_decimals=3, 
+            device_class=DEVICE_CLASS_ENERGY, 
+            state_class=STATE_CLASS_MEASUREMENT
+        ),
         cv.Optional("reactive_energy_qi"): sensor.sensor_schema(
             unit_of_measurement=UNIT_KILOVOLT_AMPS_REACTIVE_HOURS, 
             accuracy_decimals=3, 
@@ -146,7 +175,12 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_ENERGY, 
             state_class=STATE_CLASS_MEASUREMENT
         ),
-
+        cv.Optional("energy_negative_reactive_tariff1"): sensor.sensor_schema(
+            unit_of_measurement=UNIT_KILOVOLT_AMPS_REACTIVE_HOURS, 
+            accuracy_decimals=3, 
+            device_class=DEVICE_CLASS_ENERGY, 
+            state_class=STATE_CLASS_MEASUREMENT
+        ),
         cv.Optional("instantaneous_power_factor"): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY, 
             accuracy_decimals=3, 
